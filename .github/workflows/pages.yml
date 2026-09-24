@@ -50,8 +50,11 @@ jobs:
       - name: Crear la base
         run: npx prisma db push --skip-generate
 
+      # Los runners de GitHub no siempre alcanzan el sitio del cliente (su WAF
+      # bloquea IPs de datacenter), así que si la importación falla la base se
+      # reconstruye desde el snapshot versionado y el deploy sigue.
       - name: Migrar el catálogo del sitio actual
-        run: npm run import
+        run: npm run import || npm run seed
 
       - name: Quitar las rutas que necesitan servidor
         run: rm -rf src/app/api src/app/admin

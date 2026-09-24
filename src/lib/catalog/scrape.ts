@@ -43,10 +43,22 @@ export async function scrapeCatalog(
   throw new Error(`No se pudo extraer el catálogo.\n${failures.join("\n")}`);
 }
 
+/** Reintenta los cortes de red: el sitio viejo no siempre responde a la primera. */
 async function getJson<T>(url: string, headers: Record<string, string> = {}): Promise<T> {
-  const res = await fetch(url, { headers: { accept: "application/json", ...headers } });
-  if (!res.ok) throw new Error(`${res.status} en ${url}`);
-  return (await res.json()) as T;
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const res = await fetch(url, { headers: { accept: "application/json", ...headers } });
+      if (!res.ok) throw new Error(`${res.status} en ${url}`);
+      return (await res.json()) as T;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, attempt * 1500));
+    }
+  }
+
+  throw lastError;
 }
 
 type StoreApiProduct = {
