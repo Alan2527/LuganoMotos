@@ -1,0 +1,149 @@
+// Modelo de datos de Lugano Motos.
+// Pensado desde el día uno para publicar en Mercado Libre: cada producto guarda
+// los atributos que ML exige (marca, modelo, código de parte) y su propio
+// mapeo contra la publicación remota.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String     @id @default(cuid())
+  slug     String     @unique
+  name     String
+  parentId String?
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+
+  // Categoría equivalente en Mercado Libre (ej. MLA412356). Se completa
+  // manualmente o con el predictor de categorías.
+  meliCategoryId String?
+
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id               String @id @default(cuid())
+  sku              String @unique
+  slug             String @unique
+  name             String
+  description      String @default("")
+  shortDescription String @default("")
+
+  // Precio de lista en la web, en pesos, sin impuestos adicionales.
+  price          Int
+  compareAtPrice Int?
+  stock          Int     @default(0)
+  active         Boolean @default(true)
+
+  // Datos que Mercado Libre pide sí o sí en motopartes.
+  brand          String?
+  model          String?
+  partNumber     String?
+  condition      String  @default("new")
+  warrantyMonths Int?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  images   ProductImage[]
+  fitments Fitment[]
+  listing  MeliListing?
+
+  // Trazabilidad de la migración desde el sitio viejo.
+  legacyUrl  String?
+  importedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([brand])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String  @default("")
+  position  Int     @default(0)
+
+  // Mercado Libre rechaza fotos con marcas de agua, textos o bordes.
+  // El importador marca las sospechosas para revisión manual.
+  meliSafe Boolean @default(true)
+
+  @@index([productId])
+}
+
+// Compatibilidad moto ↔ repuesto. Es lo que permite publicar con
+// compatibilidades en ML y filtrar por moto en la web.
+model Fitment {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  brand     String
+  model     String
+  yearFrom  Int?
+  yearTo    Int?
+
+  @@index([productId])
+  @@index([brand, model])
+}
+
+// Mapeo 1:1 entre un producto nuestro y su publicación en Mercado Libre.
+model MeliListing {
+  id        String  @id @default(cuid())
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  meliItemId    String? @unique
+  permalink     String?
+  status        String  @default("draft") // draft | pending | active | paused | closed | error
+  listingTypeId String  @default("gold_special")
+  categoryId    String?
+
+  // Precio efectivamente publicado (precio web + markup de comisiones).
+  publishedPrice Int?
+  publishedStock Int?
+
+  lastError    String?
+  lastSyncedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Credenciales OAuth de Mercado Libre. Una fila por cuenta de vendedor.
+model MeliAccount {
+  id           String   @id @default(cuid())
+  userId       String   @unique // user_id del vendedor en ML
+  nickname     String?
+  accessToken  String
+  refreshToken String
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Cola de trabajos de sincronización, con reintentos.
+model SyncJob {
+  id        String   @id @default(cuid())
+  type      String // publish | update_price | update_stock | pause | close
+  productId String?
+  payload   String   @default("{}")
+  status    String   @default("pending") // pending | running | done | failed
+  attempts  Int      @default(0)
+  lastError String?
+  runAfter  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, runAfter])
+}

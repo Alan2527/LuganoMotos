@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-carbon-950: #0a0a0b;
+  --color-carbon-900: #121214;
+  --color-carbon-800: #1b1b1f;
+  --color-carbon-700: #26262c;
+  --color-carbon-600: #3a3a43;
+  --color-ash-400: #8b8b97;
+  --color-ash-200: #d6d6de;
+  --color-ignition-500: #ff5a1f;
+  --color-ignition-400: #ff7a45;
+  --color-ignition-600: #e03e00;
+
+  --font-display: "Archivo Black", "Arial Black", system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-carbon-950);
+  color: var(--color-ash-200);
+  font-family: var(--font-sans);
+}
+
+/* Fondo de chapa: da textura sin cargar una imagen. */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--color-carbon-800) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-carbon-800) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.headline {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
