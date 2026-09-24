@@ -63,6 +63,28 @@ El cuello de botella no es el software: **1.985 productos no tienen foto** y
 Mercado Libre no publica sin foto. El panel muestra exactamente qué le falta a
 cada producto.
 
+## Demo en GitHub Pages
+
+Cada push a la rama publica una demo estática en
+https://alan2527.github.io/LuganoMotos/ (workflow `.github/workflows/pages.yml`).
+El catálogo se vuelve a traer del sitio actual en cada deploy, así la demo
+muestra siempre los productos y precios de hoy.
+
+Es solo la tienda: **el panel y la publicación automática necesitan servidor**,
+así que el workflow saca `src/app/api` y `src/app/admin` antes de exportar.
+Para probar eso, hay que correr el sitio completo (`npm run dev`) o alojarlo en
+Vercel, Railway o un VPS.
+
+Para generarlo localmente:
+
+```bash
+PAGES_BASE_PATH=/LuganoMotos npm run build:pages   # deja el sitio en out/
+```
+
+El buscador funciona sin servidor: `npm run import` genera
+`public/search-index.json` con los ~2.400 productos y el filtrado corre en el
+cliente.
+
 ## Publicación en Mercado Libre
 
 1. Crear la aplicación en developers.mercadolibre.com.ar y completar

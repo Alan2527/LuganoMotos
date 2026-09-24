@@ -10,7 +10,8 @@
     "meli:worker": "tsx scripts/meli-worker.ts",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "build:pages": "STATIC_EXPORT=1 next build"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

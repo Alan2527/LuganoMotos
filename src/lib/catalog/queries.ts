@@ -55,27 +55,6 @@ export async function getProductBySlug(slug: string) {
   });
 }
 
-export async function searchProducts(query: string) {
-  const term = query.trim();
-  if (!term) return [];
-
-  return db.product.findMany({
-    where: {
-      active: true,
-      OR: [
-        { name: { contains: term } },
-        { brand: { contains: term } },
-        { model: { contains: term } },
-        { sku: { contains: term } },
-        { fitments: { some: { model: { contains: term } } } },
-      ],
-    },
-    take: 60,
-    orderBy: { stock: "desc" },
-    select: CARD_SELECT,
-  });
-}
-
 /** Marcas de moto cargadas en compatibilidades, para el buscador "por tu moto". */
 export async function getFitmentBrands() {
   const rows = await db.fitment.groupBy({ by: ["brand"], _count: true });

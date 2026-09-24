@@ -1,8 +1,15 @@
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/product-card";
+import { db } from "@/lib/db";
 import { getCategoryWithProducts } from "@/lib/catalog/queries";
 
 type Params = { params: Promise<{ slug: string }> };
+
+/** Necesario para el export estático: una página por categoría. */
+export async function generateStaticParams() {
+  const categories = await db.category.findMany({ select: { slug: true } });
+  return categories.map((category) => ({ slug: category.slug }));
+}
 
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;

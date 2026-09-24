@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
 import { getProductBySlug } from "@/lib/catalog/queries";
 import { discountPercent, formatPrice } from "@/lib/money";
 
 type Params = { params: Promise<{ slug: string }> };
+
+/** Necesario para el export estático: una página por producto. */
+export async function generateStaticParams() {
+  const products = await db.product.findMany({ select: { slug: true } });
+  return products.map((product) => ({ slug: product.slug }));
+}
 
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;

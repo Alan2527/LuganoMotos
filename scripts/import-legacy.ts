@@ -61,7 +61,40 @@ async function main() {
   }
 
   await writeFile("data/import-report.json", JSON.stringify(report, null, 2));
+  if (!flags.dryRun) await writeSearchIndex();
   printGaps(products);
+}
+
+/**
+ * Índice para el buscador. El catálogo entra entero en el cliente: son ~2.400
+ * productos, la búsqueda sale instantánea y el sitio funciona igual servido
+ * como estático (GitHub Pages) que con servidor.
+ */
+async function writeSearchIndex() {
+  const products = await db.product.findMany({
+    where: { active: true },
+    orderBy: [{ stock: "desc" }, { name: "asc" }],
+    include: {
+      images: { orderBy: { position: "asc" }, take: 1 },
+      fitments: { select: { brand: true, model: true } },
+      category: { select: { name: true, slug: true } },
+    },
+  });
+
+  const index = products.map((product) => ({
+    s: product.slug,
+    n: product.name,
+    b: product.brand,
+    p: product.price,
+    c: product.compareAtPrice,
+    k: product.stock,
+    g: product.category.name,
+    i: product.images[0]?.url ?? null,
+    f: product.fitments.map((fitment) => `${fitment.brand} ${fitment.model}`),
+  }));
+
+  await writeFile("public/search-index.json", JSON.stringify(index));
+  console.log(`Índice de búsqueda: ${index.length} productos.`);
 }
 
 function summarize(product: LegacyProduct) {

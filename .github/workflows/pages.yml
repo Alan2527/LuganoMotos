@@ -1,0 +1,74 @@
+name: Demo en GitHub Pages
+
+# Publica la tienda como sitio estático en
+# https://alan2527.github.io/LuganoMotos/
+#
+# Es una demo para mostrar el avance: el panel de Mercado Libre y la
+# publicación automática necesitan servidor, así que esas rutas se sacan antes
+# de exportar. El catálogo se vuelve a traer del sitio actual en cada deploy,
+# así la demo siempre muestra los productos y precios de hoy.
+
+on:
+  push:
+    branches: [claude/mercado-libre-auto-publish-6yj452]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "file:./dev.db"
+      PAGES_BASE_PATH: /LuganoMotos
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Generar cliente de Prisma
+        run: npx prisma generate
+
+      - name: Crear la base
+        run: npx prisma db push --skip-generate
+
+      - name: Migrar el catálogo del sitio actual
+        run: npm run import
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Quitar las rutas que necesitan servidor
+        run: rm -rf src/app/api src/app/admin
+
+      - name: Exportar el sitio estático
+        run: npm run build:pages
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
