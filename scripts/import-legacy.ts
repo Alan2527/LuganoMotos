@@ -128,7 +128,7 @@ async function upsertProduct(product: LegacyProduct) {
     data: product.images.map((url, position) => ({
       productId: saved.id,
       url,
-      alt: product.name,
+      alt: name,
       position,
       // Heurística conservadora: las fotos con logo o marca de agua en el
       // nombre quedan marcadas para revisión, porque ML las rechaza.
