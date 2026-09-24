@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logo from "@/assets/brand/logo.webp";
 import Link from "next/link";
 
 const NAV = [
@@ -23,10 +24,8 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center gap-5 px-4 py-3">
         <Link href="/" className="shrink-0">
           <Image
-            src="/brand/logo.webp"
+            src={logo}
             alt="Lugano Motos"
-            width={464}
-            height={67}
             priority
             className="h-8 w-auto sm:h-9"
           />

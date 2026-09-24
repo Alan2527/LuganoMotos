@@ -1,4 +1,5 @@
 import Image from "next/image";
+import logo from "@/assets/brand/logo.webp";
 import { Payments } from "./payments";
 
 export function Footer() {
@@ -7,10 +8,8 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2 lg:col-span-1">
           <Image
-            src="/brand/logo.webp"
+            src={logo}
             alt="Lugano Motos"
-            width={464}
-            height={67}
             className="h-9 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-steel-400">

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import local from "@/assets/brand/local.webp";
 import Link from "next/link";
 import { BrandWall } from "@/components/brand-wall";
 import { Payments } from "@/components/payments";
@@ -33,14 +34,16 @@ function Hero({ total, brands }: { total: number; brands: string[] }) {
   return (
     <section className="relative isolate overflow-hidden border-b border-carbon-800">
       <Image
-        src="/brand/local.webp"
+        src={local}
         alt="Local de Lugano Motos en Av. Riestra"
         fill
         priority
         sizes="100vw"
-        className="-z-20 object-cover object-center opacity-35"
+        className="-z-20 object-cover object-center opacity-60"
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-carbon-950 via-carbon-950/92 to-carbon-950/45" />
+      {/* Degradado solo del lado del texto: la moto tiene que verse. */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-carbon-950 via-carbon-950/88 to-carbon-950/10" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-carbon-950 to-transparent" />
       <div className="speedlines absolute inset-0 -z-10" />
 
       <div className="mx-auto max-w-7xl px-4 py-20 sm:py-28">
