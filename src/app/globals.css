@@ -1,41 +1,114 @@
 @import "tailwindcss";
 
 @theme {
-  --color-carbon-950: #0a0a0b;
-  --color-carbon-900: #121214;
-  --color-carbon-800: #1b1b1f;
-  --color-carbon-700: #26262c;
-  --color-carbon-600: #3a3a43;
-  --color-ash-400: #8b8b97;
-  --color-ash-200: #d6d6de;
-  --color-ignition-500: #ff5a1f;
-  --color-ignition-400: #ff7a45;
-  --color-ignition-600: #e03e00;
+  /* Carbono y asfalto. El rojo sale del logo de la marca (#DA251C). */
+  --color-carbon-950: #08080a;
+  --color-carbon-900: #0f0f12;
+  --color-carbon-800: #17171c;
+  --color-carbon-700: #22222a;
+  --color-carbon-600: #333340;
+  --color-steel-400: #8a8a96;
+  --color-steel-200: #dedee6;
+  --color-race-500: #da251c;
+  --color-race-400: #ff3b2f;
+  --color-race-600: #a81810;
+  --color-plate-400: #ffd200;
 
-  --font-display: "Archivo Black", "Arial Black", system-ui, sans-serif;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-saira), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-barlow), system-ui, -apple-system, sans-serif;
 }
 
 :root {
   color-scheme: dark;
+  /* Inclinación única para todo lo que "corre": títulos, chips, botones. */
+  --slant: -7deg;
 }
 
 body {
   background-color: var(--color-carbon-950);
-  color: var(--color-ash-200);
+  color: var(--color-steel-200);
   font-family: var(--font-sans);
 }
 
-/* Fondo de chapa: da textura sin cargar una imagen. */
-.bg-grid {
-  background-image:
-    linear-gradient(var(--color-carbon-800) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-carbon-800) 1px, transparent 1px);
-  background-size: 48px 48px;
+/* Título de carrera: condensada, pesada e inclinada. */
+.race-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.015em;
+  transform: skewX(var(--slant));
+  text-wrap: balance;
 }
 
-.headline {
+/* Etiqueta chica de sección, tipo cartel de box. */
+.race-label {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.75rem;
+}
+
+/* Bloque inclinado: el contenido se endereza para seguir legible. */
+.slant {
+  transform: skewX(var(--slant));
+}
+.slant > * {
+  transform: skewX(calc(var(--slant) * -1));
+}
+
+/* Fibra de carbono tejida, sutil. */
+.carbon {
+  background-color: var(--color-carbon-900);
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.022) 0 2px, transparent 2px 4px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 4px);
+}
+
+/* Asfalto con líneas de velocidad. */
+.speedlines {
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(218, 37, 28, 0.12) 0 2px,
+    transparent 2px 22px
+  );
+}
+
+/* Bandera a cuadros, en chico y al 6% para que no grite. */
+.checker {
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25% 75%, rgba(255, 255, 255, 0.06) 75%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25% 75%, rgba(255, 255, 255, 0.06) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 7px 7px;
+}
+
+/* Esquina cortada: la silueta de un carenado. */
+.cut-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+/* Los logos de marca vienen en negro sobre transparente: se pasan a blanco
+   para que funcionen como calcos de sponsor sobre el fondo oscuro. */
+.decal {
+  filter: brightness(0) invert(1);
+  opacity: 0.62;
+  transition: opacity 0.25s ease;
+}
+.decal:hover {
+  opacity: 1;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }

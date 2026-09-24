@@ -34,12 +34,12 @@ export function PublishButton({ productId }: { productId: string }) {
         type="button"
         onClick={publish}
         disabled={state === "loading"}
-        className="rounded-full border border-ignition-500 px-4 py-1.5 text-xs font-semibold text-ignition-500 transition hover:bg-ignition-500 hover:text-carbon-950 disabled:opacity-50"
+        className="rounded-full border border-race-500 px-4 py-1.5 text-xs font-semibold text-race-500 transition hover:bg-race-500 hover:text-carbon-950 disabled:opacity-50"
       >
         {state === "loading" ? "Publicando…" : "Publicar en ML"}
       </button>
       {message && (
-        <p className={`mt-1 max-w-xs text-xs ${state === "error" ? "text-red-400" : "text-ash-400"}`}>
+        <p className={`mt-1 max-w-xs text-xs ${state === "error" ? "text-red-400" : "text-steel-400"}`}>
           {message}
         </p>
       )}

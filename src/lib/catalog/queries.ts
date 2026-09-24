@@ -21,9 +21,13 @@ export async function getCategories() {
   });
 }
 
+/**
+ * Destacados de la home. Solo productos con foto: una grilla de recuadros
+ * vacíos es peor que mostrar menos productos.
+ */
 export async function getFeaturedProducts(take = 8) {
   return db.product.findMany({
-    where: { active: true, stock: { gt: 0 } },
+    where: { active: true, stock: { gt: 0 }, images: { some: {} } },
     orderBy: { updatedAt: "desc" },
     take,
     select: CARD_SELECT,

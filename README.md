@@ -5,6 +5,22 @@ publicación automática en Mercado Libre: todo producto que se carga en la web
 se encola para publicarse en ML, y los cambios de precio y stock viajan solos
 a la publicación.
 
+## Identidad visual
+
+Estética de carrera (MotoGP / motocross) construida sobre los assets reales del
+cliente, no sobre un tema genérico:
+
+- **Logo** y foto del local traídos del sitio actual (`public/brand/`).
+- **16 logos de marcas** que trabaja el local — NGK, Castrol, Ipone, Yamalube,
+  Yuasa, Hawk, Fox, Riffel, Frasle, ProTaper… (`public/marcas/`). Vienen en
+  negro sobre transparente, así que se muestran en blanco sobre el fondo
+  oscuro, como calcos de sponsor.
+- **Medios de pago** (Visa, Mastercard, Mercado Pago, cuotas) dibujados en SVG:
+  nítidos en cualquier pantalla y sin depender de un CDN ajeno.
+- Rojo `#DA251C` tomado del propio logo, tipografía condensada pesada
+  (Saira Condensed) con inclinación de carrera, fibra de carbono, líneas de
+  velocidad y placas numeradas de motocross para las categorías.
+
 ## Stack
 
 - **Next.js 15** (App Router, React 19, Tailwind 4) para la tienda y el panel.

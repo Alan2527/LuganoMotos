@@ -50,15 +50,16 @@ export function SearchResults() {
   }, [index, query]);
 
   if (!index) {
-    return <p className="text-ash-400">Cargando catálogo…</p>;
+    return <p className="text-steel-400">Cargando catálogo…</p>;
   }
 
   return (
     <>
-      <h1 className="headline text-3xl text-white">
-        {query.trim() ? `Resultados para "${query}"` : "Catálogo"}
+      <p className="race-label text-race-400">{query.trim() ? "Búsqueda" : "Catálogo completo"}</p>
+      <h1 className="race-title mt-3 text-5xl text-white sm:text-6xl">
+        {query.trim() ? query : "Todo el catálogo"}
       </h1>
-      <p className="mt-2 text-sm text-ash-400">
+      <p className="mt-2 text-sm text-steel-400">
         {results.length.toLocaleString("es-AR")} productos
       </p>
 
@@ -73,15 +74,15 @@ export function SearchResults() {
           <button
             type="button"
             onClick={() => setVisible((current) => current + PAGE_SIZE)}
-            className="rounded-full border border-carbon-700 px-6 py-3 font-semibold text-white transition hover:border-ignition-500"
+            className="slant border border-carbon-600 px-8 py-4 transition hover:border-race-500"
           >
-            Ver más productos
+            <span className="race-label text-white">Ver más productos</span>
           </button>
         </div>
       )}
 
       {results.length === 0 && (
-        <p className="mt-8 text-ash-400">
+        <p className="mt-8 text-steel-400">
           No encontramos nada con ese término. Escribinos por WhatsApp: tenemos más productos de los
           que están publicados.
         </p>

@@ -1,42 +1,63 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV = [
-  { href: "/categoria/motores", label: "Motor" },
+  { href: "/categoria/motor", label: "Motor" },
   { href: "/categoria/sistema-de-frenos", label: "Frenos" },
-  { href: "/categoria/transmision", label: "Transmisión" },
+  { href: "/categoria/kit-completo-transmision", label: "Transmisión" },
   { href: "/categoria/cascos", label: "Cascos" },
+  { href: "/categoria/aceites-lubricantes", label: "Aceites" },
   { href: "/categoria/accesorios", label: "Accesorios" },
 ];
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-carbon-800 bg-carbon-950/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-4">
-        <Link href="/" className="headline text-xl text-white">
-          Lugano<span className="text-ignition-500">Motos</span>
+    <header className="sticky top-0 z-40 border-b border-carbon-800 bg-carbon-950/92 backdrop-blur">
+      {/* Franja de carrera: rojo, blanco y cuadros. */}
+      <div className="flex h-1">
+        <span className="w-1/2 bg-race-500" />
+        <span className="checker w-1/4 bg-carbon-700" />
+        <span className="w-1/4 bg-steel-200" />
+      </div>
+
+      <div className="mx-auto flex max-w-7xl items-center gap-5 px-4 py-3">
+        <Link href="/" className="shrink-0">
+          <Image
+            src="/brand/logo.webp"
+            alt="Lugano Motos"
+            width={464}
+            height={67}
+            priority
+            className="h-8 w-auto sm:h-9"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-5 text-sm font-medium text-ash-400 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="transition hover:text-white">
-              {item.label}
+            <Link
+              key={item.href}
+              href={item.href}
+              className="slant race-label px-3 py-2 text-steel-400 transition hover:bg-race-500 hover:text-white"
+            >
+              <span>{item.label}</span>
             </Link>
           ))}
         </nav>
 
-        <form action="/buscar" className="ml-auto flex-1 md:max-w-sm">
+        <form action="/buscar" className="ml-auto min-w-0 flex-1 lg:max-w-xs">
           <input
             name="q"
-            placeholder="Buscar repuesto, marca o modelo"
-            className="w-full rounded-full border border-carbon-700 bg-carbon-900 px-4 py-2 text-sm text-white outline-none placeholder:text-ash-400/60 focus:border-ignition-500"
+            aria-label="Buscar productos"
+            placeholder="Buscá repuesto, marca o modelo"
+            className="w-full border border-carbon-700 bg-carbon-900 px-4 py-2 text-sm text-white outline-none placeholder:text-steel-400/70 focus:border-race-500"
           />
         </form>
 
         <a
           href="https://wa.me/5491100000000"
-          className="hidden rounded-full bg-ignition-500 px-4 py-2 text-sm font-semibold text-carbon-950 transition hover:bg-ignition-400 sm:block"
+          className="slant hidden bg-race-500 px-5 py-2.5 transition hover:bg-race-400 sm:block"
         >
-          WhatsApp
+          <span className="race-label text-white">WhatsApp</span>
         </a>
       </div>
     </header>

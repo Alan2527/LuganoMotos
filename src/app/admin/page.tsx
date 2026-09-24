@@ -34,10 +34,10 @@ export default async function AdminPage() {
     <div className="mx-auto max-w-7xl px-4 py-12">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="headline text-3xl text-white">Panel de publicación</h1>
-          <p className="mt-2 text-sm text-ash-400">
+          <h1 className="race-title text-3xl text-white">Panel de publicación</h1>
+          <p className="mt-2 text-sm text-steel-400">
             Publicación automática:{" "}
-            <span className={autoPublishEnabled() ? "text-ignition-500" : "text-ash-400"}>
+            <span className={autoPublishEnabled() ? "text-race-500" : "text-steel-400"}>
               {autoPublishEnabled() ? "activada" : "desactivada"}
             </span>{" "}
             · Cuenta de ML: {conCuenta > 0 ? "vinculada" : "sin vincular"}
@@ -47,7 +47,7 @@ export default async function AdminPage() {
         {conCuenta === 0 && (
           <a
             href="/api/meli/auth"
-            className="rounded-full bg-ignition-500 px-5 py-2.5 text-sm font-semibold text-carbon-950"
+            className="rounded-full bg-race-500 px-5 py-2.5 text-sm font-semibold text-carbon-950"
           >
             Vincular Mercado Libre
           </a>
@@ -62,7 +62,7 @@ export default async function AdminPage() {
       </div>
 
       <table className="mt-10 w-full text-left text-sm">
-        <thead className="border-b border-carbon-800 text-xs uppercase tracking-wide text-ash-400">
+        <thead className="border-b border-carbon-800 text-xs uppercase tracking-wide text-steel-400">
           <tr>
             <th className="py-3 pr-4">Producto</th>
             <th className="py-3 pr-4">Precio web</th>
@@ -80,18 +80,18 @@ export default async function AdminPage() {
               <tr key={product.id} className="border-b border-carbon-800/60 align-top">
                 <td className="py-4 pr-4">
                   <p className="font-medium text-white">{product.name}</p>
-                  <p className="text-xs text-ash-400">
+                  <p className="text-xs text-steel-400">
                     {product.category.name} · {product.brand ?? "sin marca"} · stock {product.stock}
                   </p>
                 </td>
-                <td className="py-4 pr-4 text-ash-200">{formatPrice(product.price)}</td>
-                <td className="py-4 pr-4 text-ash-200">
+                <td className="py-4 pr-4 text-steel-200">{formatPrice(product.price)}</td>
+                <td className="py-4 pr-4 text-steel-200">
                   {formatPrice(meliPrice)}
-                  <span className="block text-xs text-ash-400">con comisiones</span>
+                  <span className="block text-xs text-steel-400">con comisiones</span>
                 </td>
                 <td className="py-4 pr-4">
                   {product.listing?.permalink ? (
-                    <a href={product.listing.permalink} className="text-ignition-500 hover:underline">
+                    <a href={product.listing.permalink} className="text-race-500 hover:underline">
                       {product.listing.status}
                     </a>
                   ) : blockers.length > 0 ? (
@@ -101,7 +101,7 @@ export default async function AdminPage() {
                       ))}
                     </ul>
                   ) : (
-                    <span className="text-xs text-ash-400">listo</span>
+                    <span className="text-xs text-steel-400">listo</span>
                   )}
                   {product.listing?.lastError && (
                     <p className="mt-1 text-xs text-red-400">{product.listing.lastError}</p>
@@ -125,8 +125,8 @@ function Stat({ label, value, hint }: { label: string; value: number; hint?: str
   return (
     <div className="rounded-xl border border-carbon-800 bg-carbon-900 p-5">
       <p className="text-3xl font-semibold text-white">{value.toLocaleString("es-AR")}</p>
-      <p className="mt-1 text-sm text-ash-200">{label}</p>
-      {hint && <p className="text-xs text-ash-400">{hint}</p>}
+      <p className="mt-1 text-sm text-steel-200">{label}</p>
+      {hint && <p className="text-xs text-steel-400">{hint}</p>}
     </div>
   );
 }
