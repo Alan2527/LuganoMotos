@@ -67,6 +67,10 @@ cada producto.
 
 Cada push a la rama publica una demo estática en
 https://alan2527.github.io/LuganoMotos/ (workflow `.github/workflows/pages.yml`).
+
+Requiere habilitar Pages una sola vez: **Settings → Pages → Source: GitHub
+Actions**. El workflow no puede hacerlo solo (crear el sitio necesita permisos
+que el token de Actions no tiene).
 El catálogo se vuelve a traer del sitio actual en cada deploy, así la demo
 muestra siempre los productos y precios de hoy.
 

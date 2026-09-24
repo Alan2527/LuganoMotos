@@ -39,6 +39,11 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      # Falla acá si Pages no está habilitado en Settings → Pages → Source:
+      # GitHub Actions. Va antes de la importación para no gastar el build.
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
       - name: Generar cliente de Prisma
         run: npx prisma generate
 
@@ -47,11 +52,6 @@ jobs:
 
       - name: Migrar el catálogo del sitio actual
         run: npm run import
-
-      - name: Configurar Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Quitar las rutas que necesitan servidor
         run: rm -rf src/app/api src/app/admin
